@@ -1,0 +1,11 @@
+FROM postgres:17.0-alpine
+
+RUN apk add --no-cache postgresql-contrib
+
+# Initialize the database and enable the pg_bigm extension
+RUN echo "shared_preload_libraries = 'pg_bigm'" >> /usr/share/postgresql/postgresql.conf.sample
+
+# Create a script to enable the extension
+COPY init-db.sh /docker-entrypoint-initdb.d/
+
+RUN chmod +x /docker-entrypoint-initdb.d/init-db.sh

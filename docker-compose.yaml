@@ -1,0 +1,40 @@
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.postgres
+    ports:
+      - ${DATABASE_PORT}:5432
+    volumes:
+      - boilerplate-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+
+  # maildev:
+  #   image: maildev/maildev:2.1.0
+  #   ports:
+  #     - ${MAIL_CLIENT_PORT}:1080
+  #     - ${MAIL_PORT}:1025
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: docker/staging/Dockerfile
+  #   ports:
+  #     - ${APP_PORT}:${APP_PORT}
+
+volumes:
+  boilerplate-db:
