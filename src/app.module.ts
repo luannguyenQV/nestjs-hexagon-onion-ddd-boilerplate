@@ -8,9 +8,26 @@ import { DataSourceOptions } from 'typeorm';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { DataSource } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import databaseConfig from './database/config/database.config';
 
 @Module({
-  imports: [CoreModule, PostsModule],
+  imports: [
+    CoreModule,
+    PostsModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [databaseConfig],
+      envFilePath: ['.env'],
+    }),
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfigService,
+      dataSourceFactory: async (options: DataSourceOptions) => {
+        return new DataSource(options).initialize();
+      },
+    }),
+    // AlarmsModule.withInfrastructure(AlarmInfrastructureModule.use('orm')),
+  ],
   controllers: [],
   providers: [],
 })
@@ -19,14 +36,9 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        TypeOrmModule.forRootAsync({
-          useClass: TypeOrmConfigService,
-          dataSourceFactory: async (options: DataSourceOptions) => {
-            return new DataSource(options).initialize();
-          },
-        }),
-        CoreModule.forRoot(options),
         AlarmsModule.withInfrastructure(AlarmInfrastructureModule.use('orm')),
+        // CoreModule.forRoot(options),
+        // AlarmsModule.withInfrastructure(AlarmInfrastructureModule.use('orm')),
       ],
     };
   }
