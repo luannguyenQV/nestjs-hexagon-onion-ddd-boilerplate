@@ -36,7 +36,9 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        AlarmsModule.withInfrastructure(AlarmInfrastructureModule.use('orm')),
+        AlarmsModule.withInfrastructure(
+          AlarmInfrastructureModule.use(options.driver || 'orm'),
+        ),
         // CoreModule.forRoot(options),
         // AlarmsModule.withInfrastructure(AlarmInfrastructureModule.use('orm')),
       ],
