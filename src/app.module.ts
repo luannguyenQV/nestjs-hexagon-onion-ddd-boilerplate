@@ -10,11 +10,13 @@ import { DataSource } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import databaseConfig from './database/config/database.config';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
   imports: [
     CoreModule,
     PostsModule,
+    CqrsModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [databaseConfig],
