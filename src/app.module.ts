@@ -28,7 +28,7 @@ import { CqrsModule } from '@nestjs/cqrs';
         return new DataSource(options).initialize();
       },
     }),
-    // AlarmsModule.withInfrastructure(AlarmInfrastructureModule.use('orm')),
+    AlarmsModule.withInfrastructure(AlarmInfrastructureModule.use('orm')),
   ],
   controllers: [],
   providers: [],
@@ -38,11 +38,9 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        AlarmsModule.withInfrastructure(
-          AlarmInfrastructureModule.use(options.driver || 'orm'),
-        ),
-        // CoreModule.forRoot(options),
-        // AlarmsModule.withInfrastructure(AlarmInfrastructureModule.use('orm')),
+        // AlarmsModule.withInfrastructure(
+        //   AlarmInfrastructureModule.use(options.driver || 'orm'),
+        // ),
       ],
     };
   }
